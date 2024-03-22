@@ -40,7 +40,14 @@ while (exibirMenu)
             es.AdicionarVeiculo();
             break;
         case FuncionalidadesMenu.RemoverVeiculo:
-            es.RemoverVeiculo();
+            try
+            {
+                es.RemoverVeiculo();
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Entre em contrato com administrador do sistema, forncendo 'uma foto da sua tela' (print screen) com os detalhes do ocorrido.");
+            }
             break;
         case FuncionalidadesMenu.ListarVeiculos:
             es.ListarVeiculos();
