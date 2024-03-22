@@ -1,20 +1,21 @@
-﻿using DesafioFundamentos.Models;
+﻿using System.Text.RegularExpressions;
+using DesafioFundamentos.Models;
 
 // Coloca o encoding para UTF8 para exibir acentuação
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-decimal precoInicial = 0;
-decimal precoPorHora = 0;
+var precoInicial = 0M;
+var precoPorHora = 0M;
+var padraoPlacaVeiculoEsperada = new Regex(@"\S\w{1,}", RegexOptions.IgnoreCase);
 
-Console.WriteLine("Seja bem vindo ao sistema de estacionamento!\n" +
-                  "Digite o preço inicial:");
+Console.WriteLine($"Seja bem vindo ao sistema de estacionamento!{Environment.NewLine}Digite o preço inicial:");
 precoInicial = Convert.ToDecimal(Console.ReadLine());
 
 Console.WriteLine("Agora digite o preço por hora:");
 precoPorHora = Convert.ToDecimal(Console.ReadLine());
 
 // Instancia a classe Estacionamento, já com os valores obtidos anteriormente
-Estacionamento es = new Estacionamento(precoInicial, precoPorHora);
+IEstacionamento es = new Estacionamento(precoInicial, precoPorHora, padraoPlacaVeiculoEsperada);
 
 string opcao = string.Empty;
 bool exibirMenu = true;
@@ -29,28 +30,28 @@ while (exibirMenu)
     Console.WriteLine("3 - Listar veículos");
     Console.WriteLine("4 - Encerrar");
 
-    switch (Console.ReadLine())
+    var opcaoMenuInformada = Console.ReadLine();
+
+    _ = Enum.TryParse(opcaoMenuInformada, out FuncionalidadesMenu opcaoMenu);
+
+    switch (opcaoMenu)
     {
-        case "1":
+        case FuncionalidadesMenu.CadastrarVeiculo:
             es.AdicionarVeiculo();
             break;
-
-        case "2":
+        case FuncionalidadesMenu.RemoverVeiculo:
             es.RemoverVeiculo();
             break;
-
-        case "3":
+        case FuncionalidadesMenu.ListarVeiculos:
             es.ListarVeiculos();
             break;
-
-        case "4":
+        case FuncionalidadesMenu.Encerrar:
             exibirMenu = false;
             break;
-
         default:
             Console.WriteLine("Opção inválida");
             break;
-    }
+    };
 
     Console.WriteLine("Pressione uma tecla para continuar");
     Console.ReadLine();
